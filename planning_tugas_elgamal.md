@@ -1,6 +1,6 @@
-# 📋 Planning Tugas Kriptografi: Diffie-Hellman & ElGamal
+# **Planning Tugas Kriptografi: Diffie-Hellman & ElGamal**
 
-## 🕵️ Studi Kasus: Misi Rahasia Twilight
+## **Studi Kasus: Misi Rahasia Twilight**
 
 > **Lloyd Forger** (codename: Twilight) adalah agen mata-mata yang harus mengirim
 > laporan intel lapangan kepada **Anya**, rekan operasinya di markas.
@@ -8,17 +8,17 @@
 >
 > Lloyd menggunakan **Diffie-Hellman** untuk menyepakati kunci rahasia dengan Anya
 > tanpa harus bertemu langsung, lalu **ElGamal** untuk mengenkripsi pesan `"INTEL"`
-> agar tidak bisa dibaca siapapun — bahkan orang yang bisa membaca pikiran sekalipun! 🧠
+> agar tidak bisa dibaca seorangpun — bahkan orang yang bisa membaca pikiran sekalipun! 
 
 ```
-📡  Pengirim   :  Lloyd (Alice) — mengenkripsi laporan
-🔐  Penerima   :  Anya  (Bob)  — mendekripsi dengan kunci privat
-📨  Pesan Asli :  "INTEL"
+Pengirim   :  Lloyd (Alice) — mengenkripsi laporan
+Penerima   :  Anya  (Bob)  — mendekripsi dengan kunci privat
+Pesan Asli :  "INTEL"
 ```
 
 ---
 
-## 🏗️ Arsitektur Program
+## **Arsitektur Program**
 
 ```
 main.py
@@ -43,7 +43,7 @@ FASE 4 — ElGamal Decryption
 
 ---
 
-## 👥 Pembagian Jobdesk — Sekuensial
+## **Pembagian Jobdesk — Sekuensial**
 
 > [!IMPORTANT]
 > **Orang 1 harus selesai dan menyerahkan semua file sebelum Orang 2 boleh mulai.**
@@ -51,7 +51,7 @@ FASE 4 — ElGamal Decryption
 
 ---
 
-### 🧑‍💻 Orang 1 — Fondasi Matematika + Diffie-Hellman
+### Orang 1 — Fondasi Matematika + Diffie-Hellman
 **Mengerjakan:** `math_utils.py` dan `diffie_hellman.py`
 
 | No | Fungsi | Deskripsi |
@@ -63,9 +63,9 @@ FASE 4 — ElGamal Decryption
 | 5 | `diffie_hellman(n, g, x, y)` | Jalankan DH Key Exchange, print semua tahapan step-by-step |
 
 **Yang diserahkan ke Orang 2 (setelah selesai & diuji):**
-- ✅ `math_utils.py` — fungsi no. 1–4
-- ✅ `diffie_hellman.py` — fungsi no. 5
-- ✅ Nilai `p`, `g`, dan `K` yang dipakai agar Orang 2 bisa lanjut
+- `math_utils.py` — fungsi no. 1–4
+- `diffie_hellman.py` — fungsi no. 5
+- Nilai `p`, `g`, dan `K` yang dipakai agar Orang 2 bisa lanjut
 
 **Test Case Validasi (dari materi):**
 ```
@@ -75,7 +75,7 @@ Output: X=209, Y=197, K=K'=79  ✓
 
 ---
 
-### 🧑‍💻 Orang 2 — ElGamal + Main Program
+### **Orang 2 — ElGamal + Main Program**
 **Mengerjakan:** `elgamal.py` dan `main.py`
 
 **Mulai SETELAH menerima file dari Orang 1.**
@@ -102,7 +102,7 @@ Output dekripsi : "HALO" ✓
 
 ---
 
-## 📅 Timeline Pengerjaan
+## **Timeline Pengerjaan**
 
 ```
 Hari 1 — Orang 1
@@ -111,7 +111,7 @@ Hari 1 — Orang 1
 
 Hari 2 — Orang 1
   ├── Implementasi & uji Diffie-Hellman lengkap (step-by-step output)
-  └── ✅ SERAHKAN math_utils.py + diffie_hellman.py ke Orang 2
+  └── SERAHKAN math_utils.py + diffie_hellman.py ke Orang 2
 
 Hari 3 — Orang 2
   ├── Import file Orang 1
@@ -122,16 +122,16 @@ Hari 3 — Orang 2
 Hari 4 — Orang 2
   ├── Rakit main.py — studi kasus misi Lloyd & Anya end-to-end
   ├── Verifikasi output sesuai test case
-  └── ✅ Tulis laporan & packaging ZIP
+  └── Tulis laporan & packaging ZIP
 ```
 
 ---
 
-## 📄 Format Laporan & ZIP
+## **Format Laporan & ZIP**
 
 ```
-📦 Kelompok_X_NamaAnggota1_NamaAnggota2.zip
-├── 📄 laporan.pdf
+Kelompok_X_NamaAnggota1_NamaAnggota2.zip
+├── laporan.pdf
 │   ├── Cover + Identitas Kelompok (Kelompok X: Nama1, Nama2)
 │   ├── Studi Kasus (deskripsi skenario misi rahasia Lloyd & Anya)
 │   ├── Teori Diffie-Hellman           ← Orang 1 yang nulis
@@ -146,7 +146,7 @@ Hari 4 — Orang 2
 
 ---
 
-## ✅ Checklist Final
+## Checklist Final
 
 **Orang 1 (sebelum serah terima ke Orang 2):**
 - [ ] `is_prime(n)` — diuji ✔
@@ -167,11 +167,11 @@ Hari 4 — Orang 2
 
 ---
 
-## 💡 Contoh Output Program (Target)
+## Contoh Output Program (Target)
 
 ```
 =====================================================
-   🕵️  SISTEM KOMUNIKASI RAHASIA — OPERASI STRIX  🕵️
+      SISTEM KOMUNIKASI RAHASIA — OPERASI STRIX
 =====================================================
 
 [FASE 1] Diffie-Hellman Key Exchange
