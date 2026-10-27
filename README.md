@@ -11,11 +11,12 @@ Dokumentasi ini sekaligus berfungsi sebagai **Laporan Resmi Program Kriptografi*
 | Komponen | Keterangan |
 | :--- | :--- |
 | **Kelompok** | **Kelompok [X]** *(Isi nomor kelompok di sini)* |
-| **Anggota 1 (Orang 1)** | `[Nama Anggota 1]` — `[NIM Anggota 1]` *(Fondasi Matematika & Diffie-Hellman)* |
-| **Anggota 2 (Orang 2)** | `Khosy Syehab` — `[NIM Khosy]` *(Kriptosistem ElGamal, Integrasi Sistem & GUI)* |
+| **Anggota 1 (Orang 1)** | `Jofanka Al-Kautsar Pangsetu Abady` - `5027241107` |
+| **Anggota 2 (Orang 2)** | `Muhammad Khosyi Syehab` - `5027241089` |
+| **Anggota 3 (Orang 3)** | `Muhammad Khairul Yahya` - `5027241092` |
 | **Mata Kuliah** | Kriptografi |
-| **Dosen Pengampu** | `[Nama Dosen Pengampu]` |
-| **Program Studi / Institusi** | `[Program Studi / Universitas]` |
+| **Dosen Pengampu** | `Annisaa Sri Indrawanti, S.Kom., M.Kom.` |
+| **Program Studi / Institusi** | `Institut Teknologi Sepuluh Nopember` |
 | **Tanggal Rilis** | Oktober 2026 |
 
 ---
