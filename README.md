@@ -1,11 +1,11 @@
-# 🛡️ LAPORAN PROGRAM & DOKUMENTASI SISTEM KRIPTOGRAFI
+# LAPORAN PROGRAM & DOKUMENTASI SISTEM KRIPTOGRAFI
 ## Diffie-Hellman Key Exchange & ElGamal Asymmetric Cryptosystem
 > **Studi Kasus:** Operasi Strix (*Spy x Family*) — Secure Intelligence Communication System  
 > **Repository:** [github.com/KhosySyehab/diffie-hellman-elgamal](https://github.com/KhosySyehab/diffie-hellman-elgamal)
 
 ---
 
-## 👥 IDENTITAS KELOMPOK
+## IDENTITAS KELOMPOK
 Dokumentasi ini sekaligus berfungsi sebagai **Laporan Resmi Program Kriptografi** sesuai ketentuan tugas.
 
 | Komponen | Keterangan |
@@ -20,7 +20,7 @@ Dokumentasi ini sekaligus berfungsi sebagai **Laporan Resmi Program Kriptografi*
 
 ---
 
-## 📋 DAFTAR ISI
+## DAFTAR ISI
 1. [Ringkasan Eksekutif (Executive Summary)](#1-ringkasan-eksekutif-executive-summary)
 2. [Skenario & Studi Kasus: Operasi Strix](#2-skenario--studi-kasus-operasi-strix)
 3. [Landasan Teori & Formulasi Matematika](#3-landasan-teori--formulasi-matematika)
@@ -52,13 +52,13 @@ Sistem ini merupakan implementasi perangkat lunak kriptografi kunci publik murni
 Proyek ini mengangkat skenario intelijen taktis yang diadaptasi dari misi spionase:
 
 > **Latar Belakang:**  
-> **Agen Lloyd Forger** (*Codename: Twilight / Alice*) bertugas di lapangan dan mengumpulkan laporan intelijen berlabel `INTEL`. Laporan ini harus dikirimkan secara aman kepada **Anya Forger** (*Bob*) di markas pusat. Musuh memantau seluruh saluran komunikasi radio secara agresif.
+> **Agen Lloyd Forger** (*Codename: Twilight*) bertugas di lapangan dan mengumpulkan laporan intelijen berlabel `INTEL`. Laporan ini harus dikirimkan secara aman kepada **Anya Forger** di markas pusat. Musuh memantau seluruh saluran komunikasi radio secara agresif.
 
 ```mermaid
 sequenceDiagram
     autonumber
-    actor Lloyd as Lloyd Forger (Pengirim / Alice)
-    actor Anya as Anya Forger (Penerima / Bob)
+    actor Lloyd as Lloyd Forger (Pengirim / Twilight)
+    actor Anya as Anya Forger (Penerima)
     Note over Lloyd,Anya: FASE 1: Diffie-Hellman Key Exchange
     Lloyd->>Anya: Sepakati Domain Publik (p = 251, g = 6)
     Lloyd->>Lloyd: Pilih Private Key x = 124, Hitung X = 6^124 mod 251 = 209
@@ -155,7 +155,7 @@ diffie-hellman-elgamal/
 * `is_primitive_root(g, p) -> bool`: Memverifikasi apakah $g$ merupakan generator dari grup $\mathbb{Z}_p^*$.
 
 #### Modul `diffie_hellman.py` (Protokol Pertukaran Kunci)
-* `diffie_hellman(n, g, x, y) -> dict`: Menjalankan siklus pertukaran kunci lengkap antara Alice dan Bob, memvalidasi keprimaan $n$, memeriksa status akar primitif $g$, menghitung kunci publik $X$ dan $Y$, serta memverifikasi kesamaan kunci sesi rahasia $K = K'$.
+* `diffie_hellman(n, g, x, y) -> dict`: Menjalankan siklus pertukaran kunci lengkap antara Lloyd dan Anya, memvalidasi keprimaan $n$, memeriksa status akar primitif $g$, menghitung kunci publik $X$ dan $Y$, serta memverifikasi kesamaan kunci sesi rahasia $K = K'$.
 
 #### Modul `elgamal.py` (Kriptosistem Asimetris)
 * `text_to_blocks(text, p) -> list[int]`: Melakukan encoding teks huruf A–Z ($A=00, \dots, Z=25$) menjadi representasi blok angka di mana nilai tiap blok dijamin $m < p$.
@@ -249,7 +249,7 @@ Berdasarkan data uji standar modul kriptografi:
   * $Y = 6^{158} \pmod{251} = 197$
   * $K_{\text{Lloyd}} = 197^{124} \pmod{251} = 79$
   * $K'_{\text{Anya}} = 209^{158} \pmod{251} = 79$
-* **Status:** **VALID & COCOK ($K = K' = 79$)** ✅
+* **Status:** **VALID & COCOK ($K = K' = 79$)**
 
 ---
 
@@ -269,7 +269,7 @@ Berdasarkan data uji standar modul kriptografi:
   * Setiap blok $m_i$ dienkripsi dengan parameter acak $k_i \to (a_i, b_i)$.
   * Rekonstruksi dekripsi: $m_i = b_i \cdot a_i^{p-1-x} \pmod p$ mengembalikan persis `0813`, `1904`, `0011`.
   * Konversi blok ke karakter menghasilkan kembali: `"INTEL"`.
-* **Status:** **VALID & ZERO DATA LOSS** ✅
+* **Status:** **VALID & ZERO DATA LOSS**
 
 ---
 
@@ -307,7 +307,7 @@ Menampilkan parameter publik $p, g$, kunci privat Anya $x$, input teks pesan int
 +---------------------------------------------------------------------------------------+
 |  [Tab Diffie-Hellman]   |   y - Kunci Publik Anya: [ 461 ]   | Pesan Terdekripsi: [INTEL]
 |  [Tab ElGamal]          |   --------------------------------------------------------- |
-|                         |   ✓ Enkripsi dan dekripsi berhasil!                         |
+|                         |   [Status] Enkripsi dan dekripsi berhasil!                  |
 |                         |   [Key Gen] y = 3^243 mod 2273 = 461                        |
 |                         |   [Konversi] INTEL -> 3 blok numerik                        |
 |                         |   [Blok 1] m = 0813, a = ..., b = ... -> Dekripsi = 0813    |
