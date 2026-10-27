@@ -1,0 +1,2 @@
+-Program (TANPA LIBRARY ATAU FRAMEWORK JADI, bisa menunjukkan fungsi setiap tahapan Diffie-Hellman dan ElGamal dalam 1 studi kasus 
+-laporan Program TULIS IDENTITAS KELOMPOK - Kelompok X: Nama Anggota Kelompok (format ZIP)

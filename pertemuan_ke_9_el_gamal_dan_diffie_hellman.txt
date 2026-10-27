@@ -1,0 +1,272 @@
+[Page 1]
+Diffie-Hellman Key Exchange and ElGamal Algorithm
+Week 9
+
+[Page 2]
+Pada pelajaran hari ini, kamu akan belajar tentang....
+
+[Page 3]
+Outline
+* Akar Primitif
+* Logaritma Diskrit
+* Algoritma Pertukaran Kunci Diffie-Hellman
+* Algoritma ElGamal
+
+[Page 4]
+"Jean-Philippe Aumasson. 2017. Serious Cryptography: A Practical Introduction to Modern Encryption. San Francisco: No Starch Press, Inc.
+Buku Kriptografi, Rinaldi Munir Edisi kedua, 2019
+
+Akar Primitif dan Logaritma Diskrit
+Jika n adalah bilangan bulat, maka a disebut Akar Primitif dari n jika perpangkatan $a,a^{2},...,a^{\phi(n)}$ (dalam sebuah modulus) menghasilkan nilai yang berbeda dan semuanya relatif prima dengan n. Secara Khusus jika p adalah bilangan prima, maka a disebut akar primitif dari p jika perpangkatan a, $a^{2},...,a^{p-1}$ (dalam modulus p)
+Menghasilkan nilai-nilai yang berbeda (ingat fungsi toitient Euler, bahwa jika p prima maka $\phi(p)=p-1)$
+
+[Page 5]
+"Jean-Philippe Aumasson. 2017. Serious Cryptography: A Practical Introduction to Modern Encryption. San Francisco: No Starch Press, Inc.
+Buku Kriptografi, Rinaldi Munir Edisi kedua, 2019
+
+Akar Primitif dan Logaritma Diskrit
+Contoh:
+$p=7$, maka $a=3$ adalah akar primitif dari 7 karena
+$3^{1}(mod~7)=3$
+$3^{4}(mod~7)=4$
+$3^{2}(mod~7)=2$
+$3^{5}(mod~7)=5$
+$3^{3}(mod~7)=6$
+$3^{6}(mod~7)=1$
+Jadi, semua perpangkatan dari 3 menghasilkan nilai-nilai yang berbeda (3,2,6,4,5,1), semua bilangan di dalam modulus 7 terjadi satu kali. Perpangkatan berikutnya, $3^7 (mod~7)$, $3^8(mod~7)$, ...., akan Kembali berulang menghasilkan nilai-nilai tersebut. Panjang satu siklus tidak lebih dari $7-1=6$. Secara umum, untuk p bilangan prima, maka Panjang siklus tidak lebih dari $p-1$ Maka, a disebut akar primitif dari p jika Panjang siklus adalah sepanjang mungkin yang dapat dicapai, yaitu $p-1$
+
+[Page 6]
+"Jean-Philippe Aumasson. 2017. Serious Cryptography: A Practical Introduction to Modern Encryption. San Francisco: No Starch Press, Inc.
+Buku Kriptografi, Rinaldi Munir Edisi kedua, 2019
+
+Akar Primitif dan Logaritma Diskrit
+Perhatikan bahwa $a=2$ bukan akar primitif dari 7 karena
+$2^{1}(mod~7)=2$
+$2^{4}(mod~7)=2$
+$2^{2}(mod~7)=4$
+$2^{5}(mod~7)=4$
+$2^{3}(mod~7)=1$
+$2^{6}(mod~7)=1$
+Nilai-nilai yang dihasilkan dari $2^{1},2^{2},2^{3},.....,2^{6}$ tidak semuanya berbeda dan tidak mencakup semua nilai di dalam modulus 7.
+Untuk menemukan semua akar primitif dari p, kita harus mencoba semua bilangan bulat dari 2,3,...
+Jika a adalah akar primitif dari bilangan prima p, maka untuk bilangan bulat b kita dapat menemukan pangkat x sedemikian hingga
+$b\equiv a^{x}(mod~p)$, $0\le x\le(p-1)$
+
+[Page 7]
+"Jean-Philippe Aumasson. 2017. Serious Cryptography: A Practical Introduction to Modern Encryption. San Francisco: No Starch Press, Inc.
+Buku Kriptografi, Rinaldi Munir Edisi kedua, 2019
+
+Akar Primitif dan Logaritma Diskrit
+$b\equiv a^{x}(mod~p)$, $0\le x\le(p-1)$
+Pangkat x disebut logaritma diskrit dari b untuk basis a (mod p).
+(ingat Kembali logaritma). Dari perpangkatan $y=g^{x}$, maka kita dapat memperoleh nilai $x=log_{g}y.$ Misal, $10^{x}=10000,$ maka kita dapat memperoleh nilai $x=log_{10}10000=4$ Maka, di dalam persoalan
+$b\equiv a^{x}(mod~p)$
+Kita mencari x sebagai logaritma diskrit dari b dengan basis a (mod p)
+
+Contoh:
+7 adalah akar primitif dari bilangan prima $p=41$ diketahui bahwa $15\equiv7^{3}(mod~41)$, maka 3 merupakan logaritma diskrit dari 15 dalam basis 7 (mod 41)
+
+[Page 8]
+Algoritma Pertukaran Kunci Diffie-Hellman
+Sekilas Diffie-Hellman Key Exchange
+Motivasi: mencari cara aman untuk berbagi kunci rahasia antara pengirim dan penerima
+Solusi yang ditawarkan: Algoritma pertukaran kunci Diffie-Hellman membangkitkan kunci sesi yang sama di sisi pengirim dan penerima. Kunci sesi dibangkitkan dengan perhitungan yang menggunakan parameter bersifat publik dan rahasia. Hasil perhitungan akan memberikan kunci sesi yang sama baik dari sisi pengirim maupun penerima. Kunci sesi inilah yang digunakan pada algoritma kriptografi kunci-simetri
+
+[Page 9]
+Algoritma Pertukaran Kunci Deffie-Hellman
+Keamanan algoritma ini ditentukan oleh sulitnya menghitung logaritma diskrit dari sebuah kekongruenan modulo. Persoalan logaritma diskrit: jika p adalah bilangan prima, y sembarang bilangan bulat, dan g adalah akar primitf dari p, carilah x sedemikian hingga $y\equiv g^{x}(mod~p).$
+Menghitung $y\equiv g^{x}(mod~p)$ untuk nilai diketahui g, p, dan x adalah persoalan mudah. Tetapi sebaliknya. Jika yang diketahui g, p, dan y, maka menemukan x menjadi sangat sulit. Mencari x artinya menghitung logaritma diskrit dari y dengan basis g (mod p).
+
+[Page 10]
+Algoritma Pertukaran Kunci Deffie-Hellman
+Dua orang yang berkomunikasi adalah Alice (A) dan Bob (B).
+A dan B menyepakati sebuah bilangan prima n dan sebuah bilangan bulat g sedemikian hingga g adalah akar primitif dari n. Nilai n dan g bersifat tidak rahasia dan bisa dipertukarkan melalui saluran komunikasi yang tidak aman sekalipun.
+A membangkitkan bilangan bulat acak x dan mengirim hasil perhitungan berikut kepada B: $X = g^{x}$ mod n
+B membangkitkan bilangan bulat acak y dan mengirim hasil perhitungan berikut kepada A: $Y = g^{y}$ mod n
+A menghitung $K=Y^{x}$ mod n
+B Menghitung $K^{\prime}=X^{y}$ mod n
+$K=K^{\prime}$
+Kunci Simetri sudah diperoleh A dan B
+
+Kunci Privat Alice: x
+Kunci Publik Alice : (X,g,n)
+Kunci Privat Bob: y
+Kunci Publik Bob: (Y,g,n)
+
+Penyadap tidak memperoleh informasi nilai K/K'
+Hanya memiliki informasi n, g, X, Y
+Tidak memiliki informasi x dan y
+
+[Page 11]
+Algoritma Pertukaran Kunci Deffie-Hellman: with example
+Dua orang yang berkomunikasi adalah Alice (A) dan Bob (B).
+A dan B menyepakati sebuah bilangan prima $n=251$ dan sebuah bilangan bulat $g=6$ sedemikian hingga g adalah akar primitif dari n. Nilai n dan g bersifat tidak rahasia dan bisa dipertukarkan melalui saluran komunikasi yang tidak aman sekalipun.
+A membangkitkan bilangan bulat acak $x=124$ dan mengirim nilai X kepada B
+$X=g^{x}$ mod $n=6^{124}$ mod $251=209$
+B membangkitkan bilangan bulat acak $y=158$ dan mengirim nilai Y kepada A
+$Y=g^{y}$ mod $n=6^{158}$ mod $251=197$
+A menghitung $K=Y^{x}$ mod $n=197^{124}$ mod $251=79$
+B Menghitung $K^{\prime}=X^{y}$ mod $n=209^{158}$ mod $251=79$
+$K=K^{\prime}=79$
+Kunci Simetri sudah diperoleh A dan B
+
+Kunci Privat Alice: x
+Kunci Publik Alice : (X, g,n)
+Kunci Privat Bob: y
+Kunci Publik Bob: (Y,g,n)
+
+Penyadap tidak memperoleh informasi nilai K/K'
+Hanya memiliki informasi n, g, X, Y
+Tidak memiliki informasi x dan y
+
+[Page 12]
+Algoritma ElGamal
+Sekilas ElGamal Cryptography
+Algoritma Elgamal merupakan algoritma kriptografi kunci publik) dibuat oleh Taher ElGamal tahun 1984 yang pada mulanya untuk digital signature dan kemudian dimodifikasi untuk enkripsi-dekripsi
+Seperti Deffie-Hellman, keamanan algoritma ini terletak pada sulitnya menghitung logaritma diskrit
+Pengirim dan penerima menyepakati sebuah bilangan prima p dan sebuah bilangan bulat g yang merupakan akar primitif dari p
+
+[Page 13]
+Besaran2 yang Digunakan pada ElGamal
+* Bilangan prima, p (tidak rahasia, publik)
+* Bilangan bulat g yang merupakan akar primitif dari p (tidak rahasia, publik)
+* Bilangan acak, x (rahasia, kunci privat)
+* $y=g^{x}$ mod p (tidak rahasia, kunci publik)
+* m (plainteks) (rahasia)
+* a dan b (tidak rahasia)
+
+Tahapan ElGamal:
+1. Pembangkitan kunci privat dan publik: Alice dan Bob masing-masing membangkitkan pasangan kunci privat dan publiknya
+2. Enkripsi
+3. Dekripsi
+
+"Jean-Philippe Aumasson. 2017. Serious Cryptography: A Practical Introduction to Modern Encryption. San Francisco: No Starch Press, Inc.
+Buku Kriptografi, Rinaldi Munir Edisi kedua, 2019
+
+[Page 14]
+Pembangkitan Kunci Privat dan Kunci Publik
+Alice dan Bob sudah menyepakati bilangan prima p dan g. Alice membangkitkan kunci privat dan kunci publiknya sebagai berikut :
+1. Alice memilih sebuah bilangan acak x dengan syarat $1<x<p-1$
+2. Alice menghitung $y=g^{x}$ mod p
+
+Tahapan ElGamal:
+1. Pembangkitan kunci privat dan publik: Alice dan Bob masing-masing membangkitkan pasangan kunci privat dan publiknya
+2. Enkripsi
+3. Dekripsi
+
+"Jean-Philippe Aumasson. 2017. Serious Cryptography: A Practical Introduction to Modern Encryption. San Francisco: No Starch Press, Inc.
+Buku Kriptografi, Rinaldi Munir Edisi kedua, 2019
+
+[Page 15]
+Pembangkitan Kunci Privat dan Kunci Publik : with Example
+Alice dan Bob sudah menyepakati bilangan prima p dan g. Alice membangkitkan kunci privat dan kunci publiknya sebagai berikut :
+1. Alice memilih sebuah bilangan acak x dengan syarat $1<x<p-1.$ Alice memilih bilangan prima $p=2273$, akar primitif dari p yaitu $g=3$ dan $x=243$
+2. Alice menghitung $y=g^{x}$ mod $p=3^{243}$ mod $2273=461$
+3. Jadi, kunci privat Alice $x=243$ dan
+4. kunci publik Alice $(y=461$, $g=3$, $p=2273)$
+
+Tahapan ElGamal:
+1. Pembangkitan kunci privat dan publik: Alice dan Bob masing-masing membangkitkan pasangan kunci privat dan publiknya
+2. Enkripsi
+3. Dekripsi
+
+"Jean-Philippe Aumasson. 2017. Serious Cryptography: A Practical Introduction to Modern Encryption. San Francisco: No Starch Press, Inc.
+Buku Kriptografi, Rinaldi Munir Edisi kedua, 2019
+
+[Page 16]
+Enkripsi ElGamal
+Sebelum melakukan enkripsi, nyatakan pesan sebagai bilangan bulat m dan harus terletak dalam rentang $[0,p-1]$
+m dibagi ke dalam blok-blok $m_{1},m_{2},.....,m_{i}$ yang berukuran lebih kecil sedemikian hingga setiap blok $m_{i}$ merepresentasikan nilai di dalam rentang $[0,p-1]$
+Misal, Bob mengirim pesan m kepada Alice. Bob sudah mengetahui kunci publik Alice (y, g, p). Langkah-Langkah enkripsi adalah sebagai berikut:
+1. Bob memilih bilangan acak k, dalam rentang $1<k<p-1$
+2. Bob mengenkripsi pesan m menjadi chiperteks berupa pasangan nilai (a, b) dengan persamaan :
+$a=g^{k}$ mod p
+$b=y^{k} \cdot m$ mod p
+3. Pasangan (a, b) adalah chiperteks untuk pesan m. Jadi ukuran chiperteks adalah dua kali plainteksnya. Bob mengirim (a, b) kepada Alice
+
+Tahapan ElGamal:
+1. Pembangkitan kunci privat dan publik
+2. Enkripsi: Enkripsi memberikan output (a, b)
+3. Dekripsi
+
+"Jean-Philippe Aumasson. 2017. Serious Cryptography: A Practical Introduction to Modern Encryption. San Francisco: No Starch Press, Inc.
+Buku Kriptografi, Rinaldi Munir Edisi kedua, 2019
+
+[Page 17]
+Enkripsi Elgamal : with Example
+Misalkan Bob ingin mengirim plainteks 'HALO' kepada Alice. Dengan memisalkan $A=00$, B=01, Z=25, maka pesan m dalam integer adalah .......
+$m=07001114$
+Bob memecah m menjadi blok yang lebih kecil dimana nilai integer dari setiap blok m masih pada rentang $[0,p-1]=[0,2273-1]$
+m dipecah menjadi blok-blok sepanjang 4 digit angka :
+$m_{1}=0700$ dan $m_{2}=1114$
+Nilai-nilai blok $m_{i}$ masih terletak pada rentang [0, 2273-1]
+
+Tahapan ElGamal:
+1. Pembangkitan kunci privat dan publik
+2. Enkripsi: Enkripsi memberikan output (a, b)
+3. Dekripsi
+
+"Jean-Philippe Aumasson. 2017. Serious Cryptography: A Practical Introduction to Modern Encryption. San Francisco: No Starch Press, Inc.
+Buku Kriptografi, Rinaldi Munir Edisi kedua, 2019
+
+[Page 18]
+Enkripsi Elgamal : with Example (lanjutan)
+Enkripsi $m_{1}=0700$
+Bob memilih bilangan acak $k=1463$ (nilai k masih pada rentang [0, 2273-1]. Bob kemudian menghitung:
+$a=g^{k}$ mod $p=3^{1463}$ mod $2273=1439$
+$b=y^{k} \cdot m_{1}$ mod $p=461^{1463} \cdot 0700$ mod $2273=74$
+Jadi, chiperteks yang dihasilkan untuk $m_{1}$ adalah $c_{1}=(1439,74)$
+
+Enkripsi $m_{2}=1114$
+Bob memilih bilangan acak $k=2001$ (nilai k masih pada rentang [0, 2273-1]. Bob kemudian menghitung:
+$a=g^{k}$ mod $p=3^{2001}$ mod $2273=1220$
+$b=y^{k} \cdot m_{2}$ mod $p=461^{2001} \cdot 1114$ mod $2273=1682$
+Jadi, chiperteks yang dihasilkan untuk $m_{2}$ adalah $c_{2}=(1220,1682)$
+
+Tahapan ElGamal:
+1. Pembangkitan kunci privat dan publik
+2. Enkripsi: Bob mengirim chiperteks $c_{1}=(1439,74)$ dan $c_{2}=(1220,1682)$ kepada Alice
+3. Dekripsi
+
+"Jean-Philippe Aumasson. 2017. Serious Cryptography: A Practical Introduction to Modern Encryption. San Francisco: No Starch Press, Inc.
+Buku Kriptografi, Rinaldi Munir Edisi kedua, 2019
+
+[Page 19]
+Dekripsi ElGamal
+Alice menggunakan kunci privat x untuk mendekripsi a dan b menjadi plainteks m dengan persamaan
+$m=(\frac{b}{a^{x}})$ mod $p=b \cdot (a^{x})^{-1} mod~p$
+
+Tahapan ElGamal:
+1. Pembangkitan kunci privat dan publik
+2. Enkripsi
+3. Dekripsi: Dekripsi memberikan output m
+
+"Jean-Philippe Aumasson. 2017. Serious Cryptography: A Practical Introduction to Modern Encryption. San Francisco: No Starch Press, Inc.
+Buku Kriptografi, Rinaldi Munir Edisi kedua, 2019
+
+[Page 20]
+Dekripsi Elgamal : with Example
+Dekripsi $c_{1}=(1439,74)$
+$(a^{x})^{-1} = a^{p-1-x} mod~p = 1439^{2029} mod~2273 = 1791$
+$m_{1}=(\frac{b}{a^{x}})$ mod p = $b \cdot (a^{x})^{-1} mod~p = 74 \cdot 1791$ mod $2273=700=0700$
+
+Dekripsi $c_{2}=(1220,1682)$
+$(a^{x})^{-1} = a^{p-1-x} mod~p = 1220^{2029} mod~2273 = 1125$
+$m_{2}=(\frac{b}{a^{x}})$ mod p = $b \cdot (a^{x})^{-1} mod~p = 1682 \cdot 1125$ mod $2273=1114$
+
+Plainteks yang didekripsi adalah $m_{1}m_{2}=07001114$ yang jika dikembalikan ke karakter semula adalah 'HALO'
+
+Tahapan ElGamal:
+1. Pembangkitan kunci privat dan publik
+2. Enkripsi
+3. Dekripsi: Alice mendekripsi chiperteks menjadi $m_{1}=0700$ dan $m_{2}=1114$ yang berisi plainteks 'HALO'
+
+"Jean-Philippe Aumasson. 2017. Serious Cryptography: A Practical Introduction to Modern Encryption. San Francisco: No Starch Press, Inc.
+Buku Kriptografi, Rinaldi Munir Edisi kedua, 2019
+
+[Page 21]
+TERIMA KASIH!
+
+BACA SELENGKAPNYA DI SINI:
+"Jean-Philippe Aumasson. 2017. Serious Cryptography: A Practical Introduction to Modern Encryption. San Francisco: No Starch Press, Inc.
+Buku Kriptografi, Rinaldi Munir Edisi kedua, 2019
