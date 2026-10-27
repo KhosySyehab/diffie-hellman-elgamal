@@ -1,5 +1,9 @@
 import tkinter as tk
+import random
+
 from math_utils import mod_exp, is_primitive_root
+from elgamal import (text_to_blocks, blocks_to_text,
+                     elgamal_keygen, elgamal_encrypt, elgamal_decrypt)
 
 BG = "#1c202c"      # latar utama
 FACE = "#232939"    # permukaan kartu
@@ -116,7 +120,7 @@ class App(tk.Tk):
         if name == "Diffie-Hellman":
             self.page_dh()
         else:
-            head(self.content, "ElGamal", "Halaman ini menunggu elgamal.py dari Orang 2.")
+            self.page_elgamal()
 
     def page_dh(self):
         head(self.content, "Diffie-Hellman", "Lloyd dan Anya menyepakati kunci rahasia lewat saluran publik.")
@@ -201,6 +205,141 @@ class App(tk.Tk):
             (f"[3] Lloyd   K  = Y^x mod {p} = {K}", ACC),
             (f"[4] Anya    K′ = X^y mod {p} = {K2}", ACC),
         ])
+
+    # ------------------------------------------------------------------
+    # Halaman ElGamal
+    # ------------------------------------------------------------------
+
+    def page_elgamal(self):
+        head(self.content, "ElGamal",
+             "Lloyd mengenkripsi laporan intel \u2018INTEL\u2019 untuk Anya.")
+        row = tk.Frame(self.content, bg=BG)
+        row.pack(fill="both", expand=True, pady=(26, 0))
+
+        left = Neu(row, pad=22)
+        left.pack(side="left", anchor="n")
+        f = left.inner
+        tk.Label(f, text="PARAMETER", bg=FACE, fg=DIM,
+                 font=(FONT, 9, "bold")).pack(anchor="w")
+        self.eg = [field(f, l, d) for l, d in [
+            ("p   bilangan prima",  2273),
+            ("g   akar primitif",   3),
+            ("x   rahasia Anya",    243),
+            ("Pesan (A\u2013Z)",    "INTEL"),
+        ]]
+        btn(f, "Enkripsi & Dekripsi", self.run_eg).pack(fill="x", pady=(22, 0))
+        self.eg_status = tk.Label(f, text="", bg=FACE, fg=RED,
+                                  font=(FONT, 9), wraplength=260, justify="left")
+        self.eg_status.pack(anchor="w", pady=(12, 0))
+
+        right = tk.Frame(row, bg=BG)
+        right.pack(side="left", fill="both", expand=True, padx=(26, 0))
+
+        tiles = tk.Frame(right, bg=BG)
+        tiles.pack(fill="x")
+        self.eg_tiles = {}
+        for i, (k, t, c) in enumerate([
+                ("y",     "y  \u00b7  kunci publik Anya",  PINK),
+                ("plain", "Pesan terdekripsi",             GREEN)]):
+            n = Neu(tiles, pad=18)
+            n.pack(side="left", fill="x", expand=True,
+                   padx=(0 if i == 0 else 14, 0))
+            tk.Label(n.inner, text=t, bg=FACE, fg=DIM,
+                     font=(FONT, 9)).pack(anchor="w")
+            v = tk.Label(n.inner, text="\u2014", bg=FACE, fg=c,
+                         font=(FONT, 24, "bold"))
+            v.pack(anchor="w", pady=(6, 0))
+            self.eg_tiles[k] = v
+
+        self.eg_verdict = tk.Label(
+            right,
+            text="Masukkan parameter lalu tekan Enkripsi & Dekripsi.",
+            bg=BG, fg=DIM, font=(FONT, 10))
+        self.eg_verdict.pack(anchor="w", pady=(22, 10))
+
+        log = Neu(right, pressed=True, pad=16, face=SUNK)
+        log.pack(fill="both", expand=True)
+        self.eg_log = tk.Text(
+            log.inner, bg=SUNK, fg=TXT, relief="flat", bd=0,
+            highlightthickness=0, font=(MONO, 10),
+            width=60, height=12, padx=12, pady=10)
+        self.eg_log.pack()
+        self.eg_log.config(state="disabled")
+
+    def write_eg(self, lines):
+        self.eg_log.config(state="normal")
+        self.eg_log.delete("1.0", "end")
+        for text, color in lines:
+            self.eg_log.tag_config(color, foreground=color)
+            self.eg_log.insert("end", text + "\n", color)
+        self.eg_log.config(state="disabled")
+
+    def run_eg(self):
+        try:
+            p   = int(self.eg[0].get())
+            g   = int(self.eg[1].get())
+            x   = int(self.eg[2].get())
+            msg = self.eg[3].get().strip().upper()
+        except ValueError:
+            self.eg_status.config(text="Isi semua kolom dengan benar.")
+            return
+        if not is_primitive_root(g, p):
+            self.eg_status.config(text=f"{g} bukan akar primitif dari {p}.")
+            return
+        if not msg.isalpha():
+            self.eg_status.config(text="Pesan hanya boleh berisi huruf A\u2013Z.")
+            return
+        if not (1 < x < p - 1):
+            self.eg_status.config(text=f"x harus dalam rentang (1, {p - 1}).")
+            return
+        self.eg_status.config(text="")
+
+        # --- Key generation ---
+        y = elgamal_keygen(p, g, x)
+
+        # --- Enkripsi ---
+        blocks   = text_to_blocks(msg, p)
+        ks       = [random.randint(2, p - 2) for _ in blocks]
+        ciphers  = [elgamal_encrypt(m, p, g, y, k)
+                    for m, k in zip(blocks, ks)]
+
+        # --- Dekripsi ---
+        dec_blks = [elgamal_decrypt(a, b, p, x) for a, b in ciphers]
+        result   = blocks_to_text(dec_blks, p, trim=len(msg))
+
+        # --- Update tile cards ---
+        self.eg_tiles["y"].config(text=str(y))
+        self.eg_tiles["plain"].config(text=result)
+
+        ok = result == msg
+        self.eg_verdict.config(
+            text="\u2713 Enkripsi dan dekripsi berhasil!" if ok
+                 else "\u2717 Dekripsi gagal.",
+            fg=GREEN if ok else RED)
+
+        # --- Log step-by-step ---
+        block_size = len(str(p - 1))
+        conv = "  " + "  ".join(f"{c}={ord(c) - ord('A'):02d}" for c in msg)
+
+        lines = [
+            (f"[Key Gen]  y = {g}^{x} mod {p} = {y}", TXT),
+            ("", TXT),
+            (f"[Konversi] {msg}", DIM),
+            (conv, DIM),
+            (f"  \u2192 {len(blocks)} blok ({block_size} digit/blok)", DIM),
+            ("", TXT),
+        ]
+        for i, (m, (a, b), k, dm) in \
+                enumerate(zip(blocks, ciphers, ks, dec_blks)):
+            lines += [
+                (f"[Blok {i + 1}]  m = {m:0{block_size}d}   k = {k}", TXT),
+                (f"  a = {g}^{k} mod {p} = {a}",            ACC),
+                (f"  b = {y}^{k} \u00b7 {m} mod {p} = {b}", ACC),
+                (f"  Dekripsi \u2192 {dm:0{block_size}d}",   PINK),
+                ("", TXT),
+            ]
+        lines.append((f"[Hasil]  '{result}'", GREEN if ok else RED))
+        self.write_eg(lines)
 
 
 if __name__ == "__main__":
