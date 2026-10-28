@@ -1,7 +1,7 @@
 import tkinter as tk
 import random
 
-from math_utils import mod_exp, is_primitive_root
+from math_utils import mod_exp, is_primitive_root, is_prime
 from elgamal import (text_to_blocks, blocks_to_text,
                      elgamal_keygen, elgamal_encrypt, elgamal_decrypt)
 
@@ -176,15 +176,23 @@ class App(tk.Tk):
             self.log.insert("end", text + "\n", color)
         self.log.config(state="disabled")
 
+    def dh_error(self, msg):
+        self.status.config(text=msg)
+        self.verdict.config(text=msg, fg=RED)
+        for k in ("X", "Y"):
+            self.tiles[k].config(text="—")
+        self.tiles["K"].config(text="—", fg=GREEN)
+        self.write([])
+
     def run_dh(self):
         try:
             p, g, x, y = (int(e.get()) for e in self.e)
         except ValueError:
-            self.status.config(text="Isi semua kolom dengan angka bulat.")
-            return
+            return self.dh_error("Isi semua kolom dengan angka bulat.")
+        if not is_prime(p):
+            return self.dh_error(f"p = {p} bukan bilangan prima.")
         if not is_primitive_root(g, p):
-            self.status.config(text=f"{g} bukan akar primitif dari {p}.")
-            return
+            return self.dh_error(f"g = {g} bukan akar primitif dari p = {p}. Coba g lain.")
         self.status.config(text="")
 
         X, Y = mod_exp(g, x, p), mod_exp(g, y, p)
